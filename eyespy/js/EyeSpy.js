@@ -20,11 +20,11 @@ EyeSpy.prototype.SetGame = function (/*gameObject*/) { //for now just hardcore t
     var winHeight = window.innerHeight;
     var winWidth = document.body.clientWidth;
     
-    //Init top bar
+    //Init side bar
     
     var box = document.createElement('div');
-    var boxWidth = winWidth;
     var boxHeight = boxWidth / 3;
+    var boxWidth = winWidth;
     document.body.appendChild(box);
     
     //initialize objects
@@ -37,11 +37,11 @@ EyeSpy.prototype.SetGame = function (/*gameObject*/) { //for now just hardcore t
     
     //TODO not like it'll matter with new UI but grrr why is image always a bit too big?
     //That includes drawing image with canvas
-    var canvas = document.createElement('canvas');
+    var canvas = document.getElementById('canvas');
     canvas.id = "canvas";
     canvas.width = winWidth;
     canvas.height = winHeight;
-    document.body.appendChild(canvas);
+    //document.body.appendChild(canvas);
     var ctx = canvas.getContext('2d');
     
     var bg = new Image();

@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<!-- HTML5 Hello world by kirupa - http://www.kirupa.com/html5/getting_your_feet_wet_html5_pg1.htm -->
 <html lang="en-us">
 
 	<head>
 		
 		<meta charset="utf-8">
 		<!--<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>-->
+		<link rel="stylesheet" type="text/css" href="menu.css">
 		<script src="js/GameObject.js"></script>
 		<script src="js/EyeSpy.js"></script>
 		<script src="js/main.js"></script>
+		
 		
 	<title>Eye Spy</title>
 	
@@ -16,6 +17,36 @@
 	
 	<body onload="main()">
 	
+		<!-- wrapper start -->
+		<div id="wrapper" class="wrapper">
+		    <button id="openButton" class="openMenu">Slide</button>
+		    <canvas id="canvas"></canvas>
+			<!-- other content in here -->
+		</div>
+		
+		<!-- menus here -->
+		<nav id="menu" class="menu">
+		  <button id="closeButton" class="closeMenu">Close Menu</button>
+		  <ul class="menuItems">
+		    <li class="menuItem"><a href="#" class="menuLink">Home</a></li>
+		  </ul>
+		</nav><!-- /bar -->
+		
+		<div id="mask" class="mask"></div><!-- -mask -->
+		
 	</body>
+	
+	<footer>
+		<script src="js/menu.js"></script>
+		<script type="text/javascript">
+			var slideMenu = new Menu();
+			var slideBtn = document.querySelector('#openButton');
+			
+			slideBtn.addEventListener('click', function(e) {
+			  e.preventDefault;
+			  slideMenu.open();
+			});
+		</script>
+	</footer>
 	
 </html>

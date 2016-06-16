@@ -9,8 +9,6 @@ var EyeSpy = function (element) {
 
 }
 
-
-
 /*
     initialize game with the given info.
     (picture, hotspots, etc ) are contained in the gameObject
@@ -20,29 +18,32 @@ EyeSpy.prototype.SetGame = function (/*gameObject*/) { //for now just hardcore t
     var winHeight = window.innerHeight;
     var winWidth = document.body.clientWidth;
     
-    //Init side bar
-    
-    var box = document.createElement('div');
-    var boxHeight = boxWidth / 3;
-    var boxWidth = winWidth;
-    document.body.appendChild(box);
+    //Get Menu
+    var box = document.getElementById('menu');
     
     //initialize objects
-    
     this.objects = [];
-    
-    this.objects.push(new GameObject("Frog", 0));
+    this.objects.push(new GameObject("Crayon", 0));
     
     //initialize image
+        //TODO not like it'll matter with new UI but grrr why is image always a bit too big?
+    var bgCanvas = document.getElementById('canvas');
+    bgCanvas.id = "canvas";
+    bgCanvas.width = winWidth;
+    bgCanvas.height = winHeight;
+    bgCanvas.style.left = "0px";
+    bgCanvas.style.top = "50px";
+    bgCanvas.style.position = "absolute";
+    var ctx = bgCanvas.getContext('2d');
     
-    //TODO not like it'll matter with new UI but grrr why is image always a bit too big?
-    //That includes drawing image with canvas
-    var canvas = document.getElementById('canvas');
-    canvas.id = "canvas";
-    canvas.width = winWidth;
-    canvas.height = winHeight;
-    //document.body.appendChild(canvas);
-    var ctx = canvas.getContext('2d');
+    var invisCan = document.getElementById("layer");
+    invisCan.id = "invisCan";
+    invisCan.width = bgCanvas.width;
+    invisCan.height = bgCanvas.height;
+    invisCan.style.left = "0px";
+    invisCan.style.top = "50px";
+    invisCan.style.position = "absolute";
+    var invisCtx = invisCan.getContext('2d');
     
     var bg = new Image();
     //gahhhhh scaling (and take into account UI later)
@@ -53,6 +54,12 @@ EyeSpy.prototype.SetGame = function (/*gameObject*/) { //for now just hardcore t
     }
     bg.src = "../imgs/bg.jpg"; 
     
+    invisCtx.globalAlpha = 0;
+    var layer = new Image();
+    layer.onload = function() {
+        invisCtx.drawImage(layer, 0, 0, bgWidth, bgHeight);
+    }
+    layer.src = "../imgs/layer.png";
     
     //initialize any other properties that you need here. 
     

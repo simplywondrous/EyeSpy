@@ -4,7 +4,7 @@
 
   'use strict';
 
-   /**
+  /**
    * Menu Constructor.
    */
   function Menu() {
@@ -24,8 +24,8 @@
     this._initEvents();
   };
 
-    /**
-   * Initialise Menu Events.
+  /**
+   * Initialize Menu Events.
    */
   Menu.prototype._initEvents = function() {
     // Event for clicks on the close button inside the menu.

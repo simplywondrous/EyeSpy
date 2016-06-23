@@ -1,7 +1,7 @@
 
-
-var GameObject = function (name, id) {
+var GameObject = function (name, rgb) {
     this.name = name;
-    this.id = id;
+    this.rgb = rgb;
     this.isFound = false;
 }
+

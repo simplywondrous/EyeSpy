@@ -6,27 +6,22 @@ var EyeSpy = function (element) {
     this.objects = null;
     this.image = null;
     
-    //TODO Why does putting this here make everything blank?
-    //this.invisCan.addEventListener('mousemove', this.GetObjectAt);
     //add any other properties that you need here. 
 
 }
 
 /*
     initialize game with the given info.
-    (picture, hotspots, etc ) are contained in the gameObject
+    (picture, hotspots, etc ) are contained in the some big json thing with all info necessary
 */
-EyeSpy.prototype.SetGame = function (/*gameObject*/) { //for now just hardcore the game in here. 
+EyeSpy.prototype.SetGame = function (objList, bgImage, invisImage) { //for now just hardcode the game in here. 
 
     var winHeight = window.innerHeight;
     var winWidth = document.body.clientWidth;
+    this.objects = objList;
     
     //Get Menu
     var box = document.getElementById('menu');
-    
-    //initialize objects
-    this.objects = [];
-    this.objects.push(new GameObject("Crayon", 0));
     
     //initialize image
         //TODO not like it'll matter with new UI but grrr why is image always a bit too big?
@@ -39,7 +34,8 @@ EyeSpy.prototype.SetGame = function (/*gameObject*/) { //for now just hardcore t
     bgCanvas.style.top = "50px";
     bgCanvas.style.position = "absolute";
     var ctx = bgCanvas.getContext('2d');
-    this.ctx = ctx;
+
+    
     
     var invisCan = document.getElementById("layer");
     this.invisCan = invisCan;
@@ -50,8 +46,7 @@ EyeSpy.prototype.SetGame = function (/*gameObject*/) { //for now just hardcore t
     invisCan.style.top = "50px";
     invisCan.style.position = "absolute";
     var invisCtx = invisCan.getContext('2d');
-    //TODO: Change canvas.ctx property
-    invisCan.invisCtx = invisCtx;
+    this.invisCtx = invisCtx;
     
     var bg = new Image();
     //gahhhhh scaling (and take into account UI later)
@@ -60,16 +55,18 @@ EyeSpy.prototype.SetGame = function (/*gameObject*/) { //for now just hardcore t
     bg.onload = function() {
         ctx.drawImage(bg, 0, 0, bgWidth, bgHeight);
     }
-    bg.src = "../imgs/bg.jpg"; 
+    bg.src = bgImage; 
     
-    invisCtx.globalAlpha = 0;//.002;
+    invisCtx.globalAlpha = 0.002;
     var layer = new Image();
     layer.onload = function() {
         invisCtx.drawImage(layer, 0, 0, bgWidth, bgHeight);
     }
-    layer.src = "../imgs/layer.png";
+    layer.src = invisImage;
     
-    this.invisCan.addEventListener('click', this.GetObjectAt);
+    //So binds this to the current this, which is EyeSpy obj
+    this.invisCan.addEventListener('click', this.GetObjectAt.bind(this));
+    
     //initialize any other properties that you need here. 
     
 
@@ -99,6 +96,7 @@ EyeSpy.prototype.GetObjectAt = function (position) {
     //For now register that it's clicked spot in console
     
     //get mouse click, get clicked pixel data
+    console.log(this)
     var x = event.layerX;
     var y = event.layerY;
     
@@ -111,9 +109,7 @@ EyeSpy.prototype.GetObjectAt = function (position) {
         console.log("Click");
     }
     
-    //So when there are objects, if one color is clicked loop through all objects to see which one
-    //has that color property or something?
-    //Hardcoding if statements isn't the way to go in any case
+    //Hashmap!
 
     //return object position is inside of. 
     return null;//no object found

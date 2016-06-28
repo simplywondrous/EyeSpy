@@ -1,24 +1,20 @@
 
 
-var EyeSpy = function (element) {
-   
-    this.element = element;
-    this.objects = null;
-    this.image = null;
-    
+var EyeSpy = function (gameInfo) {
+    this.objArr = gameInfo.objects;
+    this.bgSrc = gameInfo.background;  //gameInfo.bgSrc
+    this.invisSrc = gameInfo.hotspots;
     //add any other properties that you need here. 
-
 }
 
 /*
     initialize game with the given info.
     (picture, hotspots, etc ) are contained in the some big json thing with all info necessary
 */
-EyeSpy.prototype.SetGame = function (objList, bgImage, invisImage) { //for now just hardcode the game in here. 
+EyeSpy.prototype.SetGame = function () { //for now just hardcode the game in here. 
 
     var winHeight = window.innerHeight;
     var winWidth = document.body.clientWidth;
-    this.objects = objList;
     
     //Get Menu
     var box = document.getElementById('menu');
@@ -33,9 +29,8 @@ EyeSpy.prototype.SetGame = function (objList, bgImage, invisImage) { //for now j
     bgCanvas.style.left = "0px";
     bgCanvas.style.top = "50px";
     bgCanvas.style.position = "absolute";
-    var ctx = bgCanvas.getContext('2d');
-
-    
+    var bgCtx = bgCanvas.getContext('2d');
+    this.bgCtx = bgCtx;
     
     var invisCan = document.getElementById("layer");
     this.invisCan = invisCan;
@@ -53,16 +48,16 @@ EyeSpy.prototype.SetGame = function (objList, bgImage, invisImage) { //for now j
     var bgWidth = winWidth;
     var bgHeight = bgWidth * winHeight / winWidth;
     bg.onload = function() {
-        ctx.drawImage(bg, 0, 0, bgWidth, bgHeight);
+        bgCtx.drawImage(bg, 0, 0, bgWidth, bgHeight);
     }
-    bg.src = bgImage; 
+    bg.src = this.bgSrc
     
-    invisCtx.globalAlpha = 0.002;
+    //invisCtx.globalAlpha = 0.002;
     var layer = new Image();
     layer.onload = function() {
         invisCtx.drawImage(layer, 0, 0, bgWidth, bgHeight);
     }
-    layer.src = invisImage;
+    layer.src = this.invisSrc;
     
     //So binds this to the current this, which is EyeSpy obj
     this.invisCan.addEventListener('click', this.GetObjectAt.bind(this));
@@ -78,25 +73,13 @@ EyeSpy.prototype.SetGame = function (objList, bgImage, invisImage) { //for now j
 */
 EyeSpy.prototype.GetObjectAt = function (position) {
     /*
-    //http://stackoverflow.com/questions/22384423/canvas-corrupts-rgb-when-alpha-0
-    
-    So a few options - could have layer.png not displayed and just pull data from it based on x,y
-        Would require x,y to be calculated with offset if bg.jpg is not at 0,0 though
-        Unless it calculates x,y based on corner of canvas as 0,0?
-        
-        Could replace all pixels where rgb=000 with null
-        
-        Could just set alpha to 0.01? Smallest it goes without changing is 0.002
-            Gonna just take this way for now.
-            'Kay so while actual colored items are as is, everything transparent is still rgb=000
-        
-        Could have if rgb!=000 (transparent) and just avoid black
-            Nevermind turns out if alpha = 0 rgb always gets changed to 0 as well.
+        If alpha = 0.002 ends up not working
+        Then save all pixel data of invisCanvas as huge array and perform lookup on the array
+            (Would be made harder by how x, y needs to be calibrated with array 0,0 though)
     */
     //For now register that it's clicked spot in console
     
     //get mouse click, get clicked pixel data
-    console.log(this)
     var x = event.layerX;
     var y = event.layerY;
     
@@ -104,12 +87,16 @@ EyeSpy.prototype.GetObjectAt = function (position) {
     var data = pixel.data;
     var rgb = 'rgb(' + data[0] + ',' + data[1] +
                  ',' + data[2] + ')';
-    
+    /*
     if ( rgb == "rgb(255,0,0)" ) {
-        console.log("Click");
-    }
+        console.log("Clicked");
+    }*/
     
-    //Hashmap!
+    for ( var obj of this.objArr ) {
+        if ( obj.rgb == rgb ) {
+            console.log(obj);
+        }
+    }
 
     //return object position is inside of. 
     return null;//no object found

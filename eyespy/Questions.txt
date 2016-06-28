@@ -1,0 +1,6 @@
+So...  where should map be?
+Used to loop through and see if clicked rgb matches any value in GetObjectAt
+So could create map in EyeSpy
+Or map in SetGame?
+
+See top comment in main.js

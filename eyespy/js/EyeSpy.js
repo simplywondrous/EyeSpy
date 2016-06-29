@@ -2,7 +2,7 @@
 
 var EyeSpy = function (gameInfo) {
     this.objArr = gameInfo.objects;
-    this.bgSrc = gameInfo.background;  //gameInfo.bgSrc
+    this.bgSrc = gameInfo.background; 
     this.invisSrc = gameInfo.hotspots;
     //add any other properties that you need here. 
 }
@@ -11,7 +11,8 @@ var EyeSpy = function (gameInfo) {
     initialize game with the given info.
     (picture, hotspots, etc ) are contained in the some big json thing with all info necessary
 */
-EyeSpy.prototype.SetGame = function () { //for now just hardcode the game in here. 
+
+EyeSpy.prototype.SetGame = function () {
 
     var winHeight = window.innerHeight;
     var winWidth = document.body.clientWidth;
@@ -21,7 +22,7 @@ EyeSpy.prototype.SetGame = function () { //for now just hardcode the game in her
     
     //initialize image
         //TODO not like it'll matter with new UI but grrr why is image always a bit too big?
-    var bgCanvas = document.getElementById('canvas')
+    var bgCanvas = document.getElementById('canvas');
     this.bgCanvas = bgCanvas;
     bgCanvas.id = "canvas";
     bgCanvas.width = winWidth;
@@ -32,7 +33,9 @@ EyeSpy.prototype.SetGame = function () { //for now just hardcode the game in her
     var bgCtx = bgCanvas.getContext('2d');
     this.bgCtx = bgCtx;
     
-    var invisCan = document.getElementById("layer");
+    //globalAlpha doesn't work correctly and corrupts rgba data, so workaround
+    var invisCan = document.createElement('canvas');
+    //var invisCan = document.getElementById('layer');
     this.invisCan = invisCan;
     invisCan.id = "invisCan";
     invisCan.width = bgCanvas.width;
@@ -49,58 +52,53 @@ EyeSpy.prototype.SetGame = function () { //for now just hardcode the game in her
     var bgHeight = bgWidth * winHeight / winWidth;
     bg.onload = function() {
         bgCtx.drawImage(bg, 0, 0, bgWidth, bgHeight);
-    }
-    bg.src = this.bgSrc
+    };
+    bg.src = this.bgSrc;
     
-    //invisCtx.globalAlpha = 0.002;
+    var imageData;
     var layer = new Image();
-    layer.onload = function() {
+    
+    //Have the outside code register a callback function, 
+    //and have your onload() call that function with the imageData value.
+    this.afterLoad = function() {
         invisCtx.drawImage(layer, 0, 0, bgWidth, bgHeight);
-    }
+        imageData = invisCtx.getImageData(0, 0, invisCan.width, invisCan.height);
+        this.imageData = imageData;
+    };
+    
+    layer.onload = this.afterLoad.bind(this);
     layer.src = this.invisSrc;
     
     //So binds this to the current this, which is EyeSpy obj
-    this.invisCan.addEventListener('click', this.GetObjectAt.bind(this));
+    this.bgCanvas.addEventListener('click', this.GetObjectAt.bind(this));
     
     //initialize any other properties that you need here. 
     
-
-}
+};
 
 /*
     Returns Object position is contained within
     returns GameObject if inside, null otherwise.
 */
 EyeSpy.prototype.GetObjectAt = function (position) {
-    /*
-        If alpha = 0.002 ends up not working
-        Then save all pixel data of invisCanvas as huge array and perform lookup on the array
-            (Would be made harder by how x, y needs to be calibrated with array 0,0 though)
-    */
-    //For now register that it's clicked spot in console
-    
-    //get mouse click, get clicked pixel data
     var x = event.layerX;
     var y = event.layerY;
     
-    var pixel = this.invisCtx.getImageData(x, y, 1, 1);
-    var data = pixel.data;
-    var rgb = 'rgb(' + data[0] + ',' + data[1] +
-                 ',' + data[2] + ')';
-    /*
-    if ( rgb == "rgb(255,0,0)" ) {
-        console.log("Clicked");
-    }*/
+    var base = (y*(this.imageData.width*4)) + (x*4);
+    var picRGB = this.imageData.data[base] + ',' + this.imageData.data[base+1] + 
+                 ',' + this.imageData.data[base+2];
+                 
+    //console.log(x + ", " + y + ": " + picRGB);
     
     for ( var obj of this.objArr ) {
-        if ( obj.rgb == rgb ) {
+        if ( obj.rgb === picRGB ) {
             console.log(obj);
         }
     }
 
     //return object position is inside of. 
-    return null;//no object found
-} 
+    return null; //no object found
+}; 
     
 
 EyeSpy.prototype.UpdateUI = function () {
@@ -111,4 +109,4 @@ EyeSpy.prototype.UpdateUI = function () {
             if(object.isFound) ApplyStriketoElement()
             else DontDoAStrike()
     */
-}
+};

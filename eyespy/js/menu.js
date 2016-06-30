@@ -12,7 +12,7 @@
   }
 
   /**
-   * Initialise Menu.
+   * Initialize Menu.
    */
   Menu.prototype._init = function() {
     this.body = document.body;

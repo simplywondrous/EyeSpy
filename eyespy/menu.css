@@ -17,11 +17,13 @@
   height: 100%;
   overflow: hidden;
   
+  font-family: "EB Garamond", serif;
+  font-size: 1.25em; 
 }
 
 @media all and (min-width: 320px) {
   .menu {
-    width: 300px;
+    width: 250px;
   }
 }
 
@@ -50,7 +52,7 @@
   border-bottom: none;
 }
 
-.menu .menuLink {
+.menu .menuItem {
   display: block;
   padding: 12px 24px;
   color: #fff;

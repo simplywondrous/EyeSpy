@@ -7,6 +7,7 @@
 		<!--<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>-->
 		<link rel="stylesheet" type="text/css" href="menu.css">
 		<link href='https://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+		<script src="js/background.js"></script>
 		<script src="js/GameObject.js"></script>
 		<script src="js/EyeSpy.js"></script>
 		<script src="js/main.js"></script>
@@ -18,10 +19,10 @@
 	
 	<body onload="main()">
 	
-		<!-- wrapper start -->
 		<div id="wrapper" class="wrapper">
-		    <button id="openButton" class="openMenu">Slide</button>
-		    <canvas id="canvas"></canvas>
+		    <button id="openButton" class="openMenu" position=fixed>Slide</button>
+			<canvas id="bg" style="z-index: -1"></canvas>
+		    <canvas id="canvas" style="z-index: -1"></canvas>
 		    <!--<canvas id="layer"></canvas>-->
 			<!-- other content in here -->
 		</div>

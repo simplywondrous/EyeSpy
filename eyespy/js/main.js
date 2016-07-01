@@ -30,7 +30,6 @@ var gameInfo = {
 
 
 var main = function () {
-    
     var game = new EyeSpy(gameInfo);
-        game.Start();
+    game.Start();
 };

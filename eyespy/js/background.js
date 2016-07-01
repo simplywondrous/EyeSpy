@@ -1,11 +1,42 @@
-/*For fun*/
 
-//Separate background into squares (probably squares not just rectangles)
-//Test out big vs small, which one is less distracting
-//If in general squares are too distracting, do some kind of blurred image with sampled colors
+var Tiles = function () {
+    
+    var winHeight = window.innerHeight;
+    var winWidth = document.body.scrollWidth;
 
-//For each square get random pixel from picture and use its color
-
-//So need to get canvas data (from canvas id so should be fine getting context from index)
-
-//To get random number: Math.floor(Math.random() * (max - min + 1)) + min
+    var canvas = document.getElementById('bg');
+    this.canvas = canvas;
+    canvas.width = winWidth;
+    canvas.height = winHeight;
+    canvas.style.left = "0px";
+    canvas.style.top = "0px";
+    canvas.style.position = "absolute";
+    var ctx = canvas.getContext('2d');
+    this.ctx = ctx;
+    
+    var bgCanvas = document.getElementById('canvas');
+    this.bgCanvas = bgCanvas;
+    var bgCtx = bgCanvas.getContext('2d');
+    this.bgCtx = bgCtx;
+    
+    /*Calc how many squares based on squaresize, last row / col will be cut off*/
+    var squareSize = 120;
+    var cols = Math.floor(winWidth / squareSize) + 1;
+    var rows = Math.floor(winHeight / squareSize) + 1;
+    
+    for ( var row = 0; row < rows; row++ ) {
+        for ( var col = 0; col < cols; col++ ) {
+            var randomX = Math.floor(Math.random() * (winWidth + 1));
+            var randomY = Math.floor(Math.random() * (winHeight + 1));
+            var pixel = bgCtx.getImageData(randomX, randomY, 1, 1);
+            var data = pixel.data;
+            var rgba = 'rgba(' + data[0] + ',' + data[1] +
+                        ',' + data[2] + ',' + data[3] + ')';
+            //console.log ( { w: squareSize, h: squareSize, rgba: rgba} );
+            ctx.fillStyle = rgba;
+            ctx.fillRect(col*squareSize, row*squareSize, squareSize, squareSize)
+        }
+    }
+    
+    
+};

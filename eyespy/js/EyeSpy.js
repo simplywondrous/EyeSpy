@@ -77,7 +77,7 @@ EyeSpy.prototype.SetGame = function () {
     bgCanvas.width = bgWidth;
     bgCanvas.height = bgHeight;
     bgCanvas.style.left = "0px";
-    bgCanvas.style.top = "50px";
+    bgCanvas.style.top = "80px";
     bgCanvas.style.position = "absolute";
     var bgCtx = bgCanvas.getContext('2d');
     this.bgCtx = bgCtx;
@@ -88,9 +88,9 @@ EyeSpy.prototype.SetGame = function () {
     invisCan.id = "invisCan";
     invisCan.width = bgCanvas.width;
     invisCan.height = bgCanvas.height;
-    invisCan.style.left = "0px";
-    invisCan.style.top = "50px";
-    invisCan.style.position = "absolute";
+    invisCan.style.left = bgCanvas.style.left;
+    invisCan.style.top = bgCanvas.style.top;
+    invisCan.style.position = bgCanvas.style.position;
     var invisCtx = invisCan.getContext('2d');
     this.invisCtx = invisCtx;
     
@@ -116,6 +116,9 @@ EyeSpy.prototype.SetGame = function () {
     
     //So binds this to the current this, which is EyeSpy obj
     this.bgCanvas.addEventListener('click', this.GetObjectAt.bind(this));
+    
+    /*Draws Tiled Background*/
+    Tiles();
 };
 
 /**

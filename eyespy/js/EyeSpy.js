@@ -7,7 +7,7 @@ var EyeSpy = function (gameInfo) {
     //add any other properties that you need here. 
 };
 
-EyeSpy.prototype.Start = function(images) {
+EyeSpy.prototype.Start = function() {
     var leftToLoad = 0;
     var imgList = [];
     
@@ -45,8 +45,11 @@ EyeSpy.prototype.Start = function(images) {
  * 
  */
 EyeSpy.prototype.SetGame = function () {
-    var winHeight = window.innerHeight;
-    var winWidth = document.body.scrollWidth;
+    //Canvas placed here to get border
+    var bgCanvas = document.getElementById('canvas');
+    var winHeight = window.innerHeight - parseInt(bgCanvas.style.borderTop)*2
+                                       - parseInt(bgCanvas.style.margin);
+    var winWidth = document.body.scrollWidth - parseInt(bgCanvas.style.borderLeft)*2;
     
     /*Populate Menu*/
     var menu = document.getElementById('menuItems');
@@ -71,13 +74,12 @@ EyeSpy.prototype.SetGame = function () {
     var bgHeight = this.refImage.naturalHeight*ratio;
     
     /*Create Canvases*/
-    var bgCanvas = document.getElementById('canvas');
     this.bgCanvas = bgCanvas;
     bgCanvas.id = "canvas";
     bgCanvas.width = bgWidth;
     bgCanvas.height = bgHeight;
     bgCanvas.style.left = "0px";
-    bgCanvas.style.top = "80px";
+    bgCanvas.style.top = "0px";
     bgCanvas.style.position = "absolute";
     var bgCtx = bgCanvas.getContext('2d');
     this.bgCtx = bgCtx;
@@ -100,6 +102,8 @@ EyeSpy.prototype.SetGame = function () {
     var imageData = invisCtx.getImageData(0, 0, invisCan.width, invisCan.height);
     this.imageData = imageData;
     
+    //I'm proud that the below code worked so I'm keeping it for now just to show Yusef
+    //Yusef please compliment me
     //Have the outside code register a callback function, 
     //and have your onload() call that function with the imageData value.
     /*
@@ -118,7 +122,7 @@ EyeSpy.prototype.SetGame = function () {
     this.bgCanvas.addEventListener('click', this.GetObjectAt.bind(this));
     
     /*Draws Tiled Background*/
-    Tiles();
+    Tiles(ratio);
 };
 
 /**
@@ -126,8 +130,8 @@ EyeSpy.prototype.SetGame = function () {
  * so clicking it again won't do anything
  */
 EyeSpy.prototype.GetObjectAt = function (position) {
-    var x = event.layerX;
-    var y = event.layerY;
+    var x = event.layerX - parseInt(this.bgCanvas.style.borderLeft);
+    var y = event.layerY - parseInt(this.bgCanvas.style.borderTop);
     
     var base = (y*(this.imageData.width*4)) + (x*4);
     var picRGB = this.imageData.data[base] + ',' 

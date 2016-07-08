@@ -1,10 +1,10 @@
 
-var Tiles = function () {
+var Tiles = function (ratio) {
     
     var winHeight = window.innerHeight;
     var winWidth = document.body.scrollWidth;
 
-    var canvas = document.getElementById('bg');
+    var canvas = document.getElementById('tiles');
     this.canvas = canvas;
     canvas.width = winWidth;
     canvas.height = winHeight;
@@ -20,7 +20,9 @@ var Tiles = function () {
     this.bgCtx = bgCtx;
     
     /*Calc how many squares based on squaresize, last row / col will be cut off*/
-    var squareSize = 120;
+    //When ratio ~30% 120x120 looks good so ratio 100% ~40x10=400px
+    var squareSize = 400*ratio;
+    this.squareSize = squareSize;
     var cols = Math.floor(winWidth / squareSize) + 1;
     var rows = Math.floor(winHeight / squareSize) + 1;
     
@@ -32,11 +34,8 @@ var Tiles = function () {
             var data = pixel.data;
             var rgba = 'rgba(' + data[0] + ',' + data[1] +
                         ',' + data[2] + ',' + data[3] + ')';
-            //console.log ( { w: squareSize, h: squareSize, rgba: rgba} );
             ctx.fillStyle = rgba;
-            ctx.fillRect(col*squareSize, row*squareSize, squareSize, squareSize)
+            ctx.fillRect(col*squareSize, row*squareSize, squareSize, squareSize);
         }
     }
-    
-    
 };

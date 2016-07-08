@@ -1,28 +1,35 @@
 <!DOCTYPE html>
 <html lang="en-us">
-
 	<head>
-		
 		<meta charset="utf-8">
-		<!--<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>-->
 		<link rel="stylesheet" type="text/css" href="menu.css">
 		<link href='https://fonts.googleapis.com/css?family=EB+Garamond' rel='stylesheet' type='text/css'>
+		<link href="https://fonts.googleapis.com/css?family=Londrina+Shadow" rel="stylesheet" type='text/css'>
 		<script src="js/background.js"></script>
 		<script src="js/GameObject.js"></script>
 		<script src="js/EyeSpy.js"></script>
 		<script src="js/main.js"></script>
 		
-		
-	<title>Eye Spy</title>
-	
+		<title>Eye Spy</title>
 	</head>
 	
 	<body onload="main()">
-	
 		<div id="wrapper" class="wrapper">
-		    <button id="openButton" class="openMenu" position=fixed>Slide</button>
-			<canvas id="bg" style="z-index: -1"></canvas>
-		    <canvas id="canvas" style="z-index: -1"></canvas>
+		    <button id="openButton" position=fixed style="background-color: transparent; 
+		    	outline: none; border: none; cursor:pointer;
+		    	font-family: 'Londrina Shadow', cursive; font-size: 50px
+		    	">Slide</button>
+			<canvas id="tiles" style="z-index:-1"></canvas>
+			<!--Margin should be dynamic at some point-->
+			
+			<!--Div isn't encompassing canvas
+			http://stackoverflow.com/questions/10214873/make-canvas-as-wide-and-as-high-as-parent
+			-->
+			<div id="canDiv" style="display:flex; align-items:center; justify-content:center; z-index:1;">
+		    	<canvas id="canvas" style="
+		    		border:15px solid white; margin: 80px 0px 0px;
+		    		"></canvas>
+		    </div>
 		    <!--<canvas id="layer"></canvas>-->
 			<!-- other content in here -->
 		</div>
@@ -31,12 +38,11 @@
 		<nav id="menu" class="menu">
 		  <button id="closeButton" class="closeMenu">Close Menu</button>
 		  <ul class="menuItems" id="menuItems">
-		    <li class="menuItem"><a href="#" onclick="doSomething()" class="menuLink">Home</a></li>
+		    <!--<li class="menuItem"><a href="#" onclick="doSomething()" class="menuLink">Home</a></li>-->
 		  </ul>
 		</nav><!-- /bar -->
 		
 		<div id="mask" class="mask"></div><!-- -mask -->
-		
 	</body>
 	
 	<footer>
